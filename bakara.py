@@ -1,13 +1,31 @@
 
 import random as r
+import math
 
-n=100  #Numero de fichas iniciais do jogador
 
-print("Você possui {0} fichas".format(n))
+def puxa_carta(lista):
+    global baralho
 
-jogador=[] #Cartas recebidas pelo jogador
-banco=[] #Cartas recebidas pelo banco
+    carta=r.choice(baralho)
 
+    lista.append(carta)
+    baralho.remove(carta)
+
+    return lista
+
+
+def soma_cartas(lista):
+    global dicionario_cartas
+    soma=0
+
+    for i in range(len(lista)):
+        soma+=dicionario_cartas[lista[i]]
+
+    soma = soma%10
+
+    return soma
+
+#Definindo um dicionario de cartas
 dicionario_cartas = {
     'A':1,
     '2':2,
@@ -24,83 +42,44 @@ dicionario_cartas = {
     'K':0
 }
 
+#Adicioando mais baralhos
+qtde_baralhos=int(input("Quantos baralhos? "))
+baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4*qtde_baralhos
 
-baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4
+qtde_jogador=100
+valor=int(input("Quanto quer apostar?"))
 
+mao_jogador = []
+mao_banco = []
+
+resposta=True #variável controle do loop
 
 while resposta:
-
-    valor=int(input("Quanto quer apostar? "))
-
-    if(valor<=n):
-
-        aposta=input("Em quem deseja apostar? (jogador/banco ou empate) ")
-
+    if(valor<qtde_jogador):
         
-        # Distribuindo 2 cartas para o jogador e para o banco   
-        for i in range(2):
-            
-            #Sorteando cartas do jogador:
-            
-            j=r.choice(baralho)
-            jogador.append(j)    
-            baralho.remove(j)    #Retirar a carta do baralho
+        aposta=input("Aposte em jogador, banco ou empate ")
 
-            #Sorteando cartas para o banco:
-
-            b=r.choice(baralho)
-            banco.append(b)    
-            baralho.remove(b)    #Retira a carta do baralho
-
-        print("Suas cartas: {0} e {1}".format(jogador[0],jogador[1]))
-        print("Suas cartas: {0} e {1}".format(banco[0],banco[1]))
-
-        #Calculando a soma
-        soma1_jogador=jogador[0]+jogador[1]  #Primeira soma de cartas jogador
-        soma1_banco=banco[0]+banco[1]        #Primeira soma de cartas banco
-
-        print("Sua soma: {0}".format(soma1_jogador))
-
-        #Descobrindo o vencedor
-        if((soma1_jogador==8 or soma1_jogador%10==8) or (soma1_jogador==9 or soma1_jogador%10==9)):
-            vencedor='jogador'
-
-        elif((soma1_banco==8 or soma1_banco%10==8) or (soma1_banco==9 or soma1_banco%10==9)):
-            vencedor='banco'
+        #Distribuindo as cartas
         
-        elif((soma1_jogador==soma1_banco==8 or soma1_jogador%10==soma1_banco%10==8) or ((soma1_jogador==soma1_banco==9 or soma1_jogador%10==soma1_banco%10==9))):
-            vencedor='empate'
+        mao_jogador=puxa_carta(mao_jogador)
+        mao_jogador=puxa_carta(mao_jogador)
         
-        else: #Distribuindo uma terceira carta
-            if((soma1_jogador==7 or soma1_jogador%10==7) or (soma1_jogador==6 or soma1_jogador%10==6)):
-                #Não distribui a terceira carta pro jogador
-            
-            elif((soma1_banco==7 or soma1_banco%10==7) or (soma1_banco==6 or soma1_banco%10==6)):
-                #Não distribui a terceira carta para o banco
-            
-            
-        #Ganhador:
-        if(vencedor=='jogador' and (aposta== 'jogador' or aposta== 'Jogador')):
+        mao_banco=puxa_carta(mao_banco)
+        mao_banco=puxa_carta(mao_banco)
 
-        elif(vencedor=='banco' and (aposta=='banco' or aposta=='Banco')):
+        #Somando cartas
 
-        elif (vencedor=='empate' and (aposta== 'empate' or aposta== 'empate')):    
-
-        else:
-            print("Valor inválido inserido")    
+        soma_jogador = soma_cartas(mao_jogador)
+        soma_banco = soma_cartas(mao_banco)
+        
+        if(soma_banco<8):
+            if(soma_jogador<=5):  #Condição para 3 carta 
+                mao_jogador=puxa_carta(mao_jogador) 
+                soma_jogador=soma_cartas(mao_jogador)
+                ultima_jogador=dicionario_cartas[mao_jogador[2]]
+                    
 
 
     else:
         print("Você não possui fichas o suficiente")
-
-    resposta=input("Gostaria de continuar jogando (S/N)? ")
-
-    while(resposta!='N' or resposta!='S')
-        
-        if(resposta=='N'):
-            resposta= False
-        elif(resposta=='S'):
-            resposta True
-        else:
-            print("Valor incorreto")
-            resposta=input("Gostaria de continuar jogando (S/N)? ")
+    
