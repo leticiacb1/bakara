@@ -2,7 +2,6 @@
 import random as r
 import math
 
-
 def puxa_carta(lista):
     global baralho
 
@@ -77,7 +76,28 @@ while resposta:
                 mao_jogador=puxa_carta(mao_jogador) 
                 soma_jogador=soma_cartas(mao_jogador)
                 ultima_jogador=dicionario_cartas[mao_jogador[2]]
-                    
+
+        if(soma_jogador<8):
+            if(len(mao_jogador)<3):
+                if(soma_banco<=5):
+                    mao_banco=puxa_carta(mao_banco)
+                    soma_banco=soma_cartas(mao_banco)
+            else:
+                if(soma_banco<=5):
+                    if(soma_banco==3):
+                        if(ultima_jogador != 8):
+                            mao_banco=puxa_carta(mao_banco)
+                            soma_banco=soma_banco(mao_banco)
+                    elif(soma_banco==4):
+                        if(ultima_jogador not in [0,1,8,9]):
+                            mao_banco=puxa_carta(mao_banco)
+                            soma_banco=soma_banco(mao_banco)
+                    elif(soma_banco==5):
+                        if(ultima_jogador not in [0,1,2,3,8,9]):
+                            mao_banco=puxa_carta(mao_banco)
+                            soma_banco=soma_banco(mao_banco)
+        
+        #Descobrindo o vencedor
 
 
     else:
