@@ -1,9 +1,13 @@
 
+# EP - Design de Software
+# Equipe: Letícia Coêlho Barbosa
+# Data: 12/10/2020
+
 import random as r
 import math
 from os import system, name 
 
-def clear(): 
+def clear():         
    
     if name == 'nt': 
         _ = system('cls') 
@@ -11,7 +15,7 @@ def clear():
     else: 
         _ = system('clear') 
 
-def puxa_carta(lista):
+def puxa_carta(lista):   #função que recebe uma lista, sortea um valor e adiciona na lista
     global baralho
 
     carta=r.choice(baralho)
@@ -22,7 +26,7 @@ def puxa_carta(lista):
     return lista
 
 
-def soma_cartas(lista):
+def soma_cartas(lista):      # Função que recebe uma lista e soma seus itens
     global dicionario_cartas
     soma=0
 
@@ -51,10 +55,10 @@ dicionario_cartas = {
 }
 
 #Adicioando mais baralhos
-qtde_baralhos=int(input("Quantos baralhos?\n>>>> "))
+qtde_baralhos=int(input("Quantos baralhos? (1 , 6 ou 8)\n>>>> "))
 baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4*qtde_baralhos
 
-qtde_jogador=100
+qtde_jogador=10000
 print("Você possui {} moedas".format(qtde_jogador))
 valor=int(input("Quanto quer apostar?\n>>>> "))
 
@@ -71,7 +75,7 @@ while resposta:
 
         #Distribuindo as cartas
         
-        mao_jogador=puxa_carta(mao_jogador)
+        mao_jogador=puxa_carta(mao_jogador)    
         mao_jogador=puxa_carta(mao_jogador)
         
         mao_banco=puxa_carta(mao_banco)
@@ -86,13 +90,17 @@ while resposta:
 
         print("Sua soma é {}".format(soma_jogador))
         
+        #Condições para a terceira carta jogador:
         if(soma_banco<8):
-            if(soma_jogador<=5):  #Condição para 3 carta 
+            
+            if(soma_jogador<=5):  
                 mao_jogador=puxa_carta(mao_jogador) 
                 soma_jogador=soma_cartas(mao_jogador)
                 ultima_jogador=dicionario_cartas[mao_jogador[2]]
 
                 print("Suas cartas são: {0},{1} e {2}".format(mao_jogador[0],mao_jogador[1],mao_jogador[2]))   
+
+        #Condições para terceira cartas banco:
 
         if(soma_jogador<8):
             if(len(mao_jogador)<3):
@@ -119,20 +127,59 @@ while resposta:
         if(soma_jogador==soma_banco):
             resultado='empate'
         if(soma_jogador>soma_banco):
-            resultado='jogador'
+            resultado='jogador'    
         if(soma_banco>soma_jogador):
             resultado='banco'
 
         #Pagando a aposta
 
-        if(aposta==resultado):
+        if(aposta==resultado):   #Vitória
             print("Você ganhou!")
+            
             if(resultado=='empate'):
+
                 ganho=8*valor
+
+                 #Adicionando comissão da casa:
+                if(qtde_baralhos==1):
+                    comissao=0.1575*ganho
+                elif(qtde_baralhos==6):
+                    comissao=0.1444*ganho
+                elif(qtde_baralhos==8):
+                    comissao=0.1436*ganho  
+
+                #Recalculando ganho:
+                ganho=math.ceil(ganho-comissao)
+            
             if(resultado=='jogador'):
+                
                 ganho=valor
+
+                #Adicionando comissão da casa:
+                if(qtde_baralhos==1):
+                    comissao=0.0129*ganho
+                elif(qtde_baralhos==6):
+                    comissao=0.0124*ganho
+                elif(qtde_baralhos==8):
+                    comissao=0.0124*ganho
+
+                #Recalculando ganho:
+                ganho=math.ceil(ganho-comissao)
+            
             if(resultado== 'banco'):
+                
                 ganho=math.ceil(0.95*valor)
+
+                #Adicionando comissão da casa:
+                if(qtde_baralhos==1):
+                    comissao=0.0101*ganho
+                elif(qtde_baralhos==6):
+                    comissao=0.0106*ganho
+                elif(qtde_baralhos==8):
+                    comissao=0.0106*ganho
+                
+                #Recalculando ganho:
+                ganho=math.ceil(0.95*valor - comissao)
             
             qtde_jogador+=ganho
             print("Você possui {} moedas". format(qtde_jogador))
