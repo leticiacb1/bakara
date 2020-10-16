@@ -1,7 +1,7 @@
 
 # EP - Design de Software
 # Equipe: Letícia Coêlho Barbosa
-# Data: 12/10/2020
+# Data: 15/10/2020
 
 import random as r
 import math
@@ -55,7 +55,12 @@ dicionario_cartas = {
 }
 
 clear()
+
+print("*********************************************")
 print("********** BEM VINDO AO BACARÁ !!! **********")
+print("*********************************************")
+
+print("\n")
 
 #Adicioando mais baralhos
 qtde_baralhos=int(input("Com quantos baralhos quer jogar? (1 , 6 ou 8)\n>>>> "))
@@ -63,17 +68,17 @@ baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4*qtde_baralhos
 
 qtde_jogador=10000
 print("Você possui {} moedas".format(qtde_jogador))
-valor=int(input("Quanto quer apostar?\n>>>> "))
 
-mao_jogador = []
-mao_banco = []
+valor=int(input("Quanto quer apostar?\n>>>> "))
 
 resposta=True #variável controle do loop
 
 while resposta:
     clear()
     if(valor<=qtde_jogador):
-        
+        mao_jogador = []     #Listas serão inicializadas a cada loop
+        mao_banco = []
+       
         aposta=input("Aposte em jogador, banco ou empate:\n>>>> ")
         clear()
 
@@ -86,6 +91,7 @@ while resposta:
         mao_banco=puxa_carta(mao_banco)
 
         print("Suas cartas são: {} e {}".format(mao_jogador[0],mao_jogador[1]))
+        print("As cartas do banco são: {} e {}".format(mao_banco[0],mao_banco[1]))
 
         #Somando cartas
 
@@ -93,7 +99,8 @@ while resposta:
         soma_banco = soma_cartas(mao_banco)
 
         print("Sua soma é {}".format(soma_jogador))
-        
+        print("Soma banco é {}".format(soma_banco))
+
         #Condições para a terceira carta jogador:
         if(soma_banco<8):
             
@@ -120,15 +127,37 @@ while resposta:
                         if(ultima_jogador != 8):
                             mao_banco=puxa_carta(mao_banco)
                             soma_banco=soma_cartas(mao_banco)
+                            
+                            print("\n")
+                            print("Banco pegou a terceira carta")
+                            print("Soma banco: {}".format(soma_banco))
+
                     elif(soma_banco==4):
                         if(ultima_jogador not in [0,1,8,9]):
                             mao_banco=puxa_carta(mao_banco)
                             soma_banco=soma_cartas(mao_banco)
+
+                            print("\n")
+                            print("Banco pegou a terceira carta")
+                            print("Soma banco: {}".format(soma_banco))
+
                     elif(soma_banco==5):
                         if(ultima_jogador not in [0,1,2,3,8,9]):
                             mao_banco=puxa_carta(mao_banco)
                             soma_banco=soma_cartas(mao_banco)
-        
+
+                            print("\n")
+                            print("Banco pegou a terceira carta")
+                            print("Soma banco: {}".format(soma_banco))
+                    
+                    else:
+                        mao_banco=puxa_carta(mao_banco)
+                        soma_banco=soma_cartas(mao_banco)
+
+                        print("\n")
+                        print("Banco pegou a terceira carta")
+                        print("Soma banco: {}".format(soma_banco))
+
         #Descobrindo o vencedor
 
         if(soma_jogador==soma_banco):
@@ -140,7 +169,7 @@ while resposta:
 
         print('\n')
         print("Você havia aposta em : {}". format(aposta))
-        print("O resultado deu : {}".format(resultado))
+        print("O resultado foi : {}".format(resultado))
 
         #Pagando a aposta
 
