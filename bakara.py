@@ -232,12 +232,13 @@ while(True in lista_jogador_continua):   #Loop será realizado sempre que houver
 
     print("O resultado da partida foi : {}".format(resultado))
 
-    time.sleep(10)
+    time.sleep(5)
     clear()
 
-    for i in range(len(lista_aposta_jogadores)):        #Realizando a ação de Jogador por Jogador
+    j=0                                   #Index para a lista_aposta_jogadores 
+    for i in range(num_jogadores):        #Realizando a ação de Jogador por Jogador
         if(lista_jogador_continua[i]):                  #Para os jogadores que estão na partida (True)
-            if(lista_aposta_jogadores[i]==resultado):
+            if(lista_aposta_jogadores[j]==resultado):
                 print("\n")
                 print("Jogador {} ganhou!".format(i+1))
                 print("Agora você possui {} moedas".format(lista_qtde_jogadores[i]))
@@ -246,12 +247,13 @@ while(True in lista_jogador_continua):   #Loop será realizado sempre que houver
                 print("Jogador {} perdeu!".format(i+1))
                 print("Agora você possui {} moedas".format(lista_qtde_jogadores[i]))
 
-                if(lista_qtde_jogadores[i]==0):
+                if(lista_qtde_jogadores[i]==0):              #Jogador que perdeu tudo
                     print("Você perdeu tudo!")
                     print("FIM DE JOGO PRA VOCÊ, MEU CHAPA!") 
                     lista_jogador_continua[i] = False        #Retirando o jogador que perdeu tudo da partida
             
-            time.sleep(5)
+            j+=1
+            time.sleep(2)
             
         if(lista_jogador_continua[i]):                       #Para jogadores que estão na partida (True)
             clear()
@@ -260,7 +262,7 @@ while(True in lista_jogador_continua):   #Loop será realizado sempre que houver
             if(continua == 'S'):                             #Mudando lista para aqueles que querem ou não continuar o jogo
                 lista_jogador_continua[i] = True
                 clear()
-            else:
+            if(continua== 'N'):
                 lista_jogador_continua[i] = False
                 clear()
                 print("Obrigada por jogar!")
