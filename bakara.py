@@ -1,11 +1,11 @@
-
 # EP - Design de Software
 # Equipe: Letícia Coêlho Barbosa
-# Data: 15/10/2020
+# Data: 17/10/2020
 
 import random as r
 import math
 from os import system, name 
+import time
 
 def clear():         
    
@@ -64,194 +64,205 @@ print("\n")
 
 #Adicioando mais baralhos
 qtde_baralhos=int(input("Com quantos baralhos quer jogar? (1 , 6 ou 8)\n>>>> "))
-baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4*qtde_baralhos
+baralho = ['A','2','3','4','5','6','7','8','9','10','J','Q','K']*4*qtde_baralhos   
 
-qtde_jogador=10000
-print("Você possui {} moedas".format(qtde_jogador))
+num_jogadores=int(input("Quantos jogadores irão jogar?\n>>>> "))    #Implementação Mais jogadores
 
-valor=int(input("Quanto quer apostar?\n>>>> "))
+qtde_jogador=10000  #Estipulando valor de inicio 
 
-resposta=True #variável controle do loop
+lista_qtde_jogadores=[qtde_jogador for i in range(num_jogadores)]   #Uma lista com os valores inicias de cada jogador
+lista_jogador_continua = [True for i in range(num_jogadores)]       #Uma lista para jogadores que permanecem na partida
 
-while resposta:
+while(True in lista_jogador_continua):   #Loop será realizado sempre que houver pelo menos 1 jogador querendo continuar
     clear()
-    if(valor<=qtde_jogador):
-        mao_jogador = []     #Listas serão inicializadas a cada loop
-        mao_banco = []
-       
-        aposta=input("Aposte em jogador, banco ou empate:\n>>>> ")
-        clear()
 
-        #Distribuindo as cartas
+    mao_jogador = []           #Listas serão inicializadas a cada loop
+    mao_banco = []
+    lista_aposta_jogadores=[]  #Guardará as apostas de cada jogador
+
+    #Distribuindo as cartas
+    
+    mao_jogador=puxa_carta(mao_jogador)    
+    mao_jogador=puxa_carta(mao_jogador)
+    
+    mao_banco=puxa_carta(mao_banco)
+    mao_banco=puxa_carta(mao_banco)
+
+    #Somando cartas
+
+    soma_jogador = soma_cartas(mao_jogador)
+    soma_banco = soma_cartas(mao_banco)
+
+    #Condições para a terceira carta jogador:
+    if(soma_banco<8):
         
-        mao_jogador=puxa_carta(mao_jogador)    
-        mao_jogador=puxa_carta(mao_jogador)
-        
-        mao_banco=puxa_carta(mao_banco)
-        mao_banco=puxa_carta(mao_banco)
-
-        print("Suas cartas são: {} e {}".format(mao_jogador[0],mao_jogador[1]))
-        print("As cartas do banco são: {} e {}".format(mao_banco[0],mao_banco[1]))
-
-        #Somando cartas
-
-        soma_jogador = soma_cartas(mao_jogador)
-        soma_banco = soma_cartas(mao_banco)
-
-        print("Sua soma é {}".format(soma_jogador))
-        print("Soma banco é {}".format(soma_banco))
-
-        #Condições para a terceira carta jogador:
-        if(soma_banco<8):
+        if(soma_jogador<=5):  
+            mao_jogador=puxa_carta(mao_jogador) 
+            soma_jogador=soma_cartas(mao_jogador)
+            ultima_jogador=dicionario_cartas[mao_jogador[2]]
             
-            if(soma_jogador<=5):  
-                mao_jogador=puxa_carta(mao_jogador) 
-                soma_jogador=soma_cartas(mao_jogador)
-                ultima_jogador=dicionario_cartas[mao_jogador[2]]
-                
-                print("\n")
-                print("Pegando a terceira carta")
-                print("Suas cartas são: {0},{1} e {2}".format(mao_jogador[0],mao_jogador[1],mao_jogador[2]))   
-                print("Sua soma agora é {}".format(soma_jogador))
+    #Condições para terceira cartas banco:
 
-        #Condições para terceira cartas banco:
-
-        if(soma_jogador<8):
-            if(len(mao_jogador)<3):
-                if(soma_banco<=5):
-                    mao_banco=puxa_carta(mao_banco)
-                    soma_banco=soma_cartas(mao_banco)
-            else:
-                if(soma_banco<=5):
-                    if(soma_banco==3):
-                        if(ultima_jogador != 8):
-                            mao_banco=puxa_carta(mao_banco)
-                            soma_banco=soma_cartas(mao_banco)
-                            
-                            print("\n")
-                            print("Banco pegou a terceira carta")
-                            print("Soma banco: {}".format(soma_banco))
-
-                    elif(soma_banco==4):
-                        if(ultima_jogador not in [0,1,8,9]):
-                            mao_banco=puxa_carta(mao_banco)
-                            soma_banco=soma_cartas(mao_banco)
-
-                            print("\n")
-                            print("Banco pegou a terceira carta")
-                            print("Soma banco: {}".format(soma_banco))
-
-                    elif(soma_banco==5):
-                        if(ultima_jogador not in [0,1,2,3,8,9]):
-                            mao_banco=puxa_carta(mao_banco)
-                            soma_banco=soma_cartas(mao_banco)
-
-                            print("\n")
-                            print("Banco pegou a terceira carta")
-                            print("Soma banco: {}".format(soma_banco))
-                    
-                    else:
+    if(soma_jogador<8):
+        if(len(mao_jogador)<3):
+            if(soma_banco<=5):
+                mao_banco=puxa_carta(mao_banco)
+                soma_banco=soma_cartas(mao_banco)
+        else:
+            if(soma_banco<=5):
+                if(soma_banco==3):
+                    if(ultima_jogador != 8):
+                        mao_banco=puxa_carta(mao_banco)
+                        soma_banco=soma_cartas(mao_banco)
+                        
+                elif(soma_banco==4):
+                    if(ultima_jogador not in [0,1,8,9]):
                         mao_banco=puxa_carta(mao_banco)
                         soma_banco=soma_cartas(mao_banco)
 
-                        print("\n")
-                        print("Banco pegou a terceira carta")
-                        print("Soma banco: {}".format(soma_banco))
-
-        #Descobrindo o vencedor
-
-        if(soma_jogador==soma_banco):
-            resultado='empate'
-        if(soma_jogador>soma_banco):
-            resultado='jogador'    
-        if(soma_banco>soma_jogador):
-            resultado='banco'
-
-        print('\n')
-        print("Você havia aposta em : {}". format(aposta))
-        print("O resultado foi : {}".format(resultado))
-
-        #Pagando a aposta
-
-        if(aposta==resultado):   #Vitória
-            
-            if(resultado=='empate'):
-
-                ganho=8*valor
-
-                 #Adicionando comissão da casa:
-                if(qtde_baralhos==1):
-                    comissao=0.1575*ganho
-                elif(qtde_baralhos==6):
-                    comissao=0.1444*ganho
-                elif(qtde_baralhos==8):
-                    comissao=0.1436*ganho  
-
-                #Recalculando ganho:
-                ganho=math.ceil(ganho-comissao)
-            
-            if(resultado=='jogador'):
+                elif(soma_banco==5):
+                    if(ultima_jogador not in [0,1,2,3,8,9]):
+                        mao_banco=puxa_carta(mao_banco)
+                        soma_banco=soma_cartas(mao_banco)
                 
-                ganho=valor
+                else:
+                    mao_banco=puxa_carta(mao_banco)
+                    soma_banco=soma_cartas(mao_banco)
 
-                #Adicionando comissão da casa:
-                if(qtde_baralhos==1):
-                    comissao=0.0129*ganho
-                elif(qtde_baralhos==6):
-                    comissao=0.0124*ganho
-                elif(qtde_baralhos==8):
-                    comissao=0.0124*ganho
+    #Descobrindo o vencedor
 
-                #Recalculando ganho:
-                ganho=math.ceil(ganho-comissao)
-            
-            if(resultado== 'banco'):
-                
-                ganho=math.ceil(0.95*valor)
-
-                #Adicionando comissão da casa:
-                if(qtde_baralhos==1):
-                    comissao=0.0101*ganho
-                elif(qtde_baralhos==6):
-                    comissao=0.0106*ganho
-                elif(qtde_baralhos==8):
-                    comissao=0.0106*ganho
-                
-                #Recalculando ganho:
-                ganho=math.ceil(ganho - comissao)
-            
-            qtde_jogador+=ganho
-            
-            print("\n")
-            print("Você ganhou {} modedas!".format(ganho))
-            print("Agora você possui {} moedas". format(qtde_jogador))
-
-        else:
-            print("\n")
-            print("Você perdeu {} modedas!".format(valor))
-            qtde_jogador-=valor
-            print("Agora você possui {} moedas". format(qtde_jogador))
-            
-        #Mudando a variável que mantém o loop
+    if(soma_jogador==soma_banco):
+        resultado='empate'
+    if(soma_jogador>soma_banco):
+        resultado='jogador'    
+    if(soma_banco>soma_jogador):
+        resultado='banco'
+    
+    for i in range(num_jogadores):      #Loop ocorrerá para cada jogador
+        if(lista_jogador_continua[i]):  #Certificando que apenas jogadores que estão na partida irão jogar
+            clear()
         
-        if(qtde_jogador != 0):
-            print("\n")    
-            continua=input("Gostaria de continuar o jogo? (S/N)\n>>>> ")
-            
-            if(continua == 'S'):
-                resposta= True
-                clear()
-                print("Você possui {} moedas". format(qtde_jogador))
-                valor=int(input("Quanto quer apostar?\n>>>> "))
+            print("Turno Jogador ",i+1)
+            print("Você possui {} moedas".format(lista_qtde_jogadores[i]))
+            valor=int(input("Quanto você quer apostar?\n>>>> "))
+
+            while(valor>lista_qtde_jogadores[i]):
+                print("DIGITE UM VALOR VÁLIDO!\n")
+                valor=int(input("Quanto você quer apostar?\n>>>> "))
+                
+            aposta=input("Aposte em jogador, banco ou empate:\n>>>> ")
+            lista_aposta_jogadores.append(aposta)   #Adicionando apostas de cada jogador
+
+            #Pagando a aposta
+
+            if(aposta==resultado):   #VITÓRIA
+                
+                if(resultado=='empate'):
+
+                    ganho=8*valor
+
+                    #Adicionando comissão da casa:
+                    if(qtde_baralhos==1):
+                        comissao=0.1575*ganho
+                    elif(qtde_baralhos==6):
+                        comissao=0.1444*ganho
+                    elif(qtde_baralhos==8):
+                        comissao=0.1436*ganho  
+
+                    #Recalculando ganho:
+                    ganho=math.floor(ganho-comissao)
+                
+                if(resultado=='jogador'):
+                    
+                    ganho=valor
+
+                    #Adicionando comissão da casa:
+                    if(qtde_baralhos==1):
+                        comissao=0.0129*ganho
+                    elif(qtde_baralhos==6):
+                        comissao=0.0124*ganho
+                    elif(qtde_baralhos==8):
+                        comissao=0.0124*ganho
+
+                    #Recalculando ganho:
+                    ganho=math.floor(ganho-comissao)
+                
+                if(resultado== 'banco'):
+                    
+                    ganho=math.floor(0.95*valor)
+
+                    #Adicionando comissão da casa:
+                    if(qtde_baralhos==1):
+                        comissao=0.0101*ganho
+                    elif(qtde_baralhos==6):
+                        comissao=0.0106*ganho
+                    elif(qtde_baralhos==8):
+                        comissao=0.0106*ganho
+                    
+                    #Recalculando ganho:
+                    ganho=math.floor(ganho - comissao)
+                
+                lista_qtde_jogadores[i]+=ganho   #Adicionando ganho do jogador i na lista de valores
+                
+
+            else:   ##PERDEU
+                lista_qtde_jogadores[i]-=valor   #Retirando valor apostado
+
+    clear()
+
+    #Agora o resultado do jogo será exibido na tela:
+
+    print("********** Começando o jogo **********\n")
+
+    print("Cartas do jogador são: {} e {}".format(mao_jogador[0],mao_jogador[1]))
+    print("As cartas do banco são: {} e {}".format(mao_banco[0],mao_banco[1]))
+
+    if(len(mao_jogador)==3):
+        print("\n")
+        print("Jogador pega a terceira carta")
+        print("As cartasdo jogador são: {0},{1} e {2}".format(mao_jogador[0],mao_jogador[1],mao_jogador[2]))   
+
+    if(len(mao_banco)==3):
+        print("\n")
+        print("Banco pegou a terceira carta")
+
+    print("\n")    
+    print("Soma do jogador é {}".format(soma_jogador))
+    print("Soma banco é {}".format(soma_banco))
+
+    print("O resultado da partida foi : {}".format(resultado))
+
+    time.sleep(10)
+    clear()
+
+    for i in range(len(lista_aposta_jogadores)):        #Realizando a ação de Jogador por Jogador
+        if(lista_jogador_continua[i]):                  #Para os jogadores que estão na partida (True)
+            if(lista_aposta_jogadores[i]==resultado):
+                print("\n")
+                print("Jogador {} ganhou!".format(i+1))
+                print("Agora você possui {} moedas".format(lista_qtde_jogadores[i]))
             else:
-                resposta= False
+                print("\n")
+                print("Jogador {} perdeu!".format(i+1))
+                print("Agora você possui {} moedas".format(lista_qtde_jogadores[i]))
+
+                if(lista_qtde_jogadores[i]==0):
+                    print("Você perdeu tudo!")
+                    print("FIM DE JOGO PRA VOCÊ, MEU CHAPA!") 
+                    lista_jogador_continua[i] = False        #Retirando o jogador que perdeu tudo da partida
+            
+            time.sleep(5)
+            
+        if(lista_jogador_continua[i]):                       #Para jogadores que estão na partida (True)
+            clear()
+            continua=input("Jogador {} gostaria de continuar o jogo? (S/N)\n>>>> ".format(i+1))
+            
+            if(continua == 'S'):                             #Mudando lista para aqueles que querem ou não continuar o jogo
+                lista_jogador_continua[i] = True
+                clear()
+            else:
+                lista_jogador_continua[i] = False
                 clear()
                 print("Obrigada por jogar!")
-        else:
-            print("Você perdeu tudo!")
-            resposta=False 
-    else:
-        print("Você não possui fichas o suficiente")
-        print("Você possui {} moedas". format(qtde_jogador))
-        valor=int(input("Quanto quer apostar?\n>>>> "))
-    
+
+print("FIM DE JOGO!")
